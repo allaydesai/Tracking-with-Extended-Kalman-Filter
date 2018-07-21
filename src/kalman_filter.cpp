@@ -1,4 +1,5 @@
 #include "kalman_filter.h"
+#define PI 3.141592653
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -22,21 +23,70 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 
 void KalmanFilter::Predict() {
   /**
-  TODO:
     * predict the state
   */
+	// State Transition
+	x_ = F_ * x_;
+	// Uncertainty
+	MatrixXd Ft = F_.transpose();
+	P_ = F_ * P_ * Ft + Q_;
+
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
   /**
-  TODO:
     * update the state by using Kalman Filter equations
   */
+	// Relating prediction to measurement
+	VectorXd z_pred = H_ * x_;
+	// Finding the difference
+	VectorXd y = z - z_pred;
+	// Mapping error matrix
+	MatrixXd Ht = H_.transpose();
+	MatrixXd S = H_ * P_ * Ht + R_;
+	// Updating Kalman Gain
+	MatrixXd Si = S.inverse();
+	MatrixXd PHt = P_ * Ht;
+	MatrixXd K = PHt * Si;
+
+	// New State Estimate
+	x_ = x_ + (K * y);
+	long x_size = x_.size();
+	MatrixXd I = MatrixXd::Identity(x_size, x_size);
+	P_ = (I - K * H_) * P_;
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
   /**
-  TODO:
     * update the state by using Extended Kalman Filter equations
   */
+	float px = x_[0];
+	float py = x_[1];
+	float vx = x_[2];
+	float vy = x_[3];
+	
+	float rho = sqrt(px * px + py * py);
+	float theta = atan2(py, px);
+	float ro_dot = (px*vx + py * vy) / rho;
+	// Relating prediction to measurement
+	MatrixXd h_prime = MatrixXd(3,1);
+	// z_pred here >> h(x)
+	h_prime << rho, theta, ro_dot;
+	// Finding the difference
+	VectorXd y = z - h_prime;
+	// Bring theta within range -pi to pi
+	y(1) = std::fmod(y(1), 2 * PI);
+	// Mapping error matrix
+	MatrixXd Ht = H_.transpose();
+	MatrixXd S = H_ * P_ * Ht + R_;
+	// Updating Kalman Gain
+	MatrixXd Si = S.inverse();
+	MatrixXd PHt = P_ * Ht;
+	MatrixXd K = PHt * Si;
+
+	// New State Estimate
+	x_ = x_ + (K * y);
+	long x_size = x_.size();
+	MatrixXd I = MatrixXd::Identity(x_size, x_size);
+	P_ = (I - K * H_) * P_;
 }
