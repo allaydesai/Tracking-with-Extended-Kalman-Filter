@@ -9,6 +9,9 @@ using namespace std;
 
 class Tools {
 public:
+  
+  float px_last;
+  float py_last;
   /**
   * Constructor.
   */
@@ -18,9 +21,7 @@ public:
   * Destructor.
   */
   virtual ~Tools();
-
-  float px_past;
-  float py_past;
+ 
   /**
   * A helper method to calculate RMSE.
   */

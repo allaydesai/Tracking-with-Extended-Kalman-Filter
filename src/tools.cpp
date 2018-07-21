@@ -6,8 +6,8 @@ using Eigen::MatrixXd;
 using std::vector;
 
 Tools::Tools() {
-	px_past = 0.0001;
-	py_past = 0.0001;
+	px_last = 0.0001;
+	py_last = 0.0001;
 }
 
 Tools::~Tools() {}
@@ -37,8 +37,8 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
 		VectorXd residual = estimations[i] - ground_truth[i];
 
 		//coefficient-wise multiplication
-		//residual = residual.array()*residual.array();
-		rmse = rmse.array() + (residual.array() * residual.array());
+		residual = residual.array()*residual.array();
+		rmse += rmse; 
 	}
 
 	//calculate the mean
@@ -67,22 +67,30 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 	float vx = x_state(2);
 	float vy = x_state(3);
 
-	if (fabs(px*px + py * py) < .00001) {
-		px = px_past;
-		py = py_past;
+	//pre-compute a set of terms to avoid repeated calculation
+	float c1 = px * px + py * py;
+	float c2 = sqrt(c1);
+	float c3 = (c1*c2);
+
+	if (fabs(c1) < .00001) 
+	{
+		// CalculateJacobian() - Error - Division by Zero
+		// Use last good value
+		px = px_last;
+		py = py_last;
 	}
-	else {
-		px_past = px;
-		py_past = py;
+	else 
+	{
+		// assign new value to last values
+		px_last = px;
+		py_last = py;
 	}
 
-	Hj <<
-		px / sqrt(px*px + py * py), py / sqrt(px*px + py * py), 0, 0,
-		-1 * py / (px*px + py * py), px / (px*px + py * py), 0, 0,
-		py*(vx*py - vy * px) / (pow((px*px + py * py), 1.5)),
-		px * (vy*px - vx * py) / (pow((px*px + py * py), 1.5)),
-		px / pow(px*px + py * py, .5), py / pow(px*px + py * py, .5)
-		;
+	//compute the Jacobian matrix
+	Hj <<	(px / c2), (py / c2), 0, 0,
+			-(py / c1), (px / c1), 0, 0,
+			py*(vx*py - vy * px) / c3, px*(px*vy - py * vx) / c3, px / c2, py / c2;
+	
 
 	return Hj;
 }
