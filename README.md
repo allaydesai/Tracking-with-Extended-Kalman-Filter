@@ -23,7 +23,18 @@ The goals / steps of this project are the following:
 The repository consists of the following files: 
 * ./Docs/ - Supporting documentation
 * ./data/obj_pose-laser-radar-synthetic-input.txt - Text file contating measurements from the two sensors
-* 
+* ./ide_profiles - Editor profiles
+* ./src/Eigen - Eigen Library
+* ./src/CMakeLists.txt - Code compilation
+* ./src/main.cpp - communicates with the Term 2 Simulator receiving data measurements, calls a function to run the Kalman filter, calls a function to calculate RMSE
+* ./src/FusionEKF.cpp -  Initializes the filter, calls the predict function, calls the update function
+* ./src/tools.cpp - function to calculate RMSE and the Jacobian matrix
+* ./src/json.cpp - Structuring to communicate with simulator
+* ./src/kalman_filter.cpp - Defines the predict function, the update function for lidar, and the update function for radar
+* ./src/FusionEKF.h - Header file for FusionEKF.cpp
+* ./src/kalman_filter.h - Header file for kalman_filter.cpp
+* ./src/measurement_package.h - Header file for measurement_package.cpp
+* ./src/tools.h - Header file for tolls.cpp
 
 This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
 
