@@ -13,11 +13,17 @@ This project utilizes a kalman filter to estimate the state of a moving object o
 **Project Goals**
 
 The goals / steps of this project are the following:
-* Build a Kalman Filter (KF) for Lidar measurments
-* Build an Extended Kalman Filter(EKF) for Radar measurments
+* Build a Kalman Filter (KF) for tracking using Lidar measurments
+* Build an Extended Kalman Filter(EKF) for tracking using Radar measurments
 * Test algorithm against Dataset-1 in the simulator
 * Output coordinates px, py, vx, and vy RMSE should be less than or equal to the values [.11, .11, 0.52, 0.52]
 
+**Project Files**
+
+The repository consists of the following files: 
+* ./Docs/ - Supporting documentation
+* ./data/obj_pose-laser-radar-synthetic-input.txt - Text file contating measurements from the two sensors
+* 
 
 This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
 
