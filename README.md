@@ -1,7 +1,23 @@
 # Extended Kalman Filter Project Starter Code
+
+[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+
 Self-Driving Car Engineer Nanodegree Program
 
-In this project you will utilize a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower than the tolerance outlined in the project rubric. 
+Overview
+
+---
+
+This project utilizes a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. To acheive this I used a Kalman filter, lidar measurements and radar measurements to track the bicycle's position and velocity around a vehicle. Goal of the project is to obtain RMSE values that are lower than the desired tolerance. 
+
+**Project Goals**
+
+The goals / steps of this project are the following:
+* Build a Kalman Filter (KF) for Lidar measurments
+* Build an Extended Kalman Filter(EKF) for Radar measurments
+* Test algorithm against Dataset-1 in the simulator
+* Output coordinates px, py, vx, and vy RMSE should be less than or equal to the values [.11, .11, 0.52, 0.52]
+
 
 This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
 
