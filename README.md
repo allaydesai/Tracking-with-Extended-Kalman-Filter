@@ -47,6 +47,50 @@ The repository consists of the following files:
 
 This project involves Tracking Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
 
+**Project Build Instructions**
+
+1. mkdir build
+2. cd build
+3. cmake ..
+4. make
+5. ./ExtendedKF
+
+---
+
+**Dataset**
+
+The dataset consists of simulated lidar and radar measurements detecting a bicycle that travels around the vehicle.
+
+Data file:
+* obj_pose-laser-radar-synthetic-input.txt
+
+Data Flow:
+1) The measuremennt processor/matlab simulator is generating the FUSION .txt file:
+	"data/obj_pose-laser-radar-synthetic-ukf-input.txt";
+	OR
+	"../matlab_examples/obj_pose-laser-radar-synthetic-ukf-input.txt";
+
+The Input file format is:
+#L(for laser) meas_px meas_py timestamp gt_px gt_py gt_vx gt_vy
+#R(for radar) meas_rho meas_phi meas_rho_dot timestamp gt_px gt_py gt_vx gt_vy
+
+Example:
+R	8.60363	0.0290616	-2.99903	1477010443399637	8.6	0.25	-3.00029	0
+L	8.45	0.25	1477010443349642	8.45	0.25	-3.00027	0
+	
+2) The EKF Algorithm reads form file reads all the lines and generates measurement structures
+3) The MeasurementProcessor() is called with individual measurements (one by one). The results are saved
+(Attention: no file processing routines are used inside MeasurementProcessor() all the file processing routines are in the main function
+So the data read/write is decoupled from the algorithm
+4) The results are saved in an output file:
+"data/obj_pose-laser-radar-ekf-output.txt"
+
+Output file format:
+est_px est_py est_vx est_vy meas_px meas_py gt_px gt_py gt_vx gt_vy
+
+Example:
+4.53271	0.279	-0.842172	53.1339	4.29136	0.215312	2.28434	0.226323
+43.2222	2.65959	0.931181	23.2469	4.29136	0.215312	2.28434	0.226323
 
 This repository includes two files that can be used to set up and install [uWebSocketIO](https://github.com/uWebSockets/uWebSockets) for either Linux or Mac systems. For windows you can use either Docker, VMware, or even [Windows 10 Bash on Ubuntu](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) to install uWebSocketIO. Please see [this concept in the classroom](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/16cf4a78-4fc7-49e1-8621-3450ca938b77) for the required version and installation scripts.
 
